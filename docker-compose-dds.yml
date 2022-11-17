@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  dds:
+    image: '${ACROWEB3_DOCKER_REGISTRY}dds:${ACROWEB3_VERSION_DDS}'
+    user: ${DUID}:${DGID}
+    volumes:
+      - ${ACROWEB3_VOLUME_DIR_DDSDATA}:/share/dds/data
+      - ${ACROWEB3_VOLUME_DIR_DATA}:/share/archivio/experience/data
+      - ${ACROWEB3_VOLUME_DIR_SENSORS}:/sensors
+
+    ports:
+      - "${ACROWEB3_NETWORK_DDS_EXPOSED_PORT}:8080"
+      
+    environment: 
+      
+      #settings per la memoria utilizzata dalla jvm
+      INITIAL_MEMORY: ${ACROWEB3_DDS_INITIAL_MEMORY}
+      MAXIMUM_MEMORY: ${ACROWEB3_DDS_MAXIMUM_MEMORY}
+
+      #settings per i sensori
+      EXP40_CF_pathAnag: /sensors/Sensori/anagrafica.db
+      EXP40_CF_PostgresServer: "host#${ACROWEB3_PG_HOST} port#${ACROWEB3_PG_PORT} user#${ACROWEB3_PG_USER_ACROSENSORS} password#${ACROWEB3_PG_PWD_ACROSENSORS} dbname#${ACROWEB3_PG_ACROSENSORS_DB_NAME} connect_timeout#1 sslmode#disable"
+      EXP40_CF_RainfallHourlyLimit: 300
+      EXP40_DROPS4_pathAnag: /sensors/Sensori40/anagrafica.db
+      EXP40_DROPS4_PostgresServer: host#${ACROWEB3_PG_HOST} port#${ACROWEB3_PG_PORT} user#${ACROWEB3_PG_USER_ACROSENSORS} password#${ACROWEB3_PG_PWD_ACROSENSORS} dbname#${ACROWEB3_PG_ACROSENSORS_DB_NAME} connect_timeout#1 sslmode#disable
+      EXP40_DROPS4_RainfallHourlyLimit: 300
+      EXP40_DBIdentity: /sensors/Sensori40/anagrafica_merged.db
+      EXP40_sensors_jdbc: jdbc:postgresql://${ACROWEB3_PG_HOST}:${ACROWEB3_PG_PORT}/${ACROWEB3_PG_SENSORS_DB_NAME}
+      EXP40_sensors_jdbc_user: ${ACROWEB3_PG_USER_SENSORS}
+      EXP40_sensors_jdbc_pass: ${ACROWEB3_PG_PWD_SENSORS}
+
+      #TODO connessione al postgres
+      DDS_DB_NAME: ${ACROWEB3_PG_DDS_DB_NAME}
+      DDS_DB_USER: ${ACROWEB3_PG_USER_DDS}
+      DDS_DB_PASSWORD: ${ACROWEB3_PG_PWD_DDS}
+      DDS_DB_HOST: ${ACROWEB3_PG_HOST}
+      DDS_DB_PORT: ${ACROWEB3_PG_PORT}

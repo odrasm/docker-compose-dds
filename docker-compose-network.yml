@@ -1,0 +1,8 @@
+version: '3.4'
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: ${ACROWEB3_DOCKER_SUBNET}
